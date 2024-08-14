@@ -14,7 +14,7 @@ Error="${Red}[错误]${Nc}"
 Tip="${Yellow}[提示]${Nc}"
 
 mtproxy_dir="/usr/local/MTProxy"
-mtproxy_file="${mtproxy_dir}/mtproto-proxy"
+mtproxy_file="${mtproxy_dir}/mtproxy"
 mtproxy_conf="${mtproxy_dir}/config.toml"
 mtproxy_log="${mtproxy_dir}/mtproxy.log"
 Old_ver_file="${mtproxy_dir}/ver.txt"
@@ -106,7 +106,7 @@ Download(){
     cd "${mtproxy_dir}"
     echo -e "${Info} 开始下载 mtproxy......"
     check_Arch
-    wget --no-check-certificate https://github.com/ellermister/mtproxy/releases/download/${New_ver}/mtproto-proxy
+    wget --no-check-certificate https://github.com/ellermister/mtproxy/releases/download/${New_ver}/mtproto-proxy -O mtproxy
     # tar xvf MTProxy-${New_ver}-linux-${Arch}.tar.gz
     # rm -f MTProxy-${New_ver}-linux-${Arch}.tar.gz
     chmod +x mtproxy
