@@ -14,7 +14,7 @@ Error="${Red}[错误]${Nc}"
 Tip="${Yellow}[提示]${Nc}"
 
 mtproxy_dir="/usr/local/MTProxy"
-mtproxy_file="${mtproxy_dir}/mtproxy"
+mtproxy_file="${mtproxy_dir}/mtproto-proxy"
 mtproxy_conf="${mtproxy_dir}/config.toml"
 mtproxy_log="${mtproxy_dir}/mtproxy.log"
 Old_ver_file="${mtproxy_dir}/ver.txt"
